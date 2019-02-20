@@ -1,0 +1,39 @@
+set nocompatible
+syntax on
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'prabirshrestha/asyncomplete.vim'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-surround'
+Plugin 'mattn/emmet-vim'
+Plugin 'alvan/vim-closetag'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'lifepillar/vim-mucomplete'
+Plugin 'gorodinskiy/vim-coloresque'
+call vundle#end()
+filetype plugin indent on
+autocmd VimEnter * NERDTree
+set tabstop=4
+set shiftwidth=4
+set expandtab
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+let g:asyncomplete_smart_completion = 1
+let g:asyncomplete_auto_popup = 1
+set completeopt+=menuone
+set completeopt+=noinsert
+let g:mucomplete#enable_auto_at_startup = 1
+set wildmenu
+
