@@ -8,9 +8,19 @@ set guioptions+=a
 set wrap
 set linebreak
 
+"Buffer options
+set hidden
+nnoremap <Space> <C-W>l :bn<CR>
+nnoremap <C-@> <C-W>l :bp<CR>
+nnoremap qq :bp<bar>sp<bar>bn<bar>bd<CR>
+
+
 "Search settings
 set ignorecase
 
+"Cursorline
+autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" | 11 | endif
+set cursorline
 
 "Setting default vim directories so the swap files do not pollute the current
 "folders
@@ -40,13 +50,13 @@ Plugin 'scrooloose/nerdtree'
 
 
 Plugin 'tpope/vim-surround'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'alvan/vim-closetag'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'gorodinskiy/vim-coloresque'
 
 "Plugin 'haishanh/night-owl.vim'
-Plugin 'ayu-theme/ayu-vim'
+"Plugin 'ayu-theme/ayu-vim'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'ryanoasis/vim-devicons'
@@ -58,11 +68,11 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'mileszs/ack.vim'
 Plugin 'leafgarland/typescript-vim'
-
+Plugin 'ap/vim-buftabline'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'w0rp/ale'
+"Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -93,9 +103,17 @@ let g:ackhighlight = 1
 
 filetype plugin indent on
 autocmd VimEnter * NERDTree
+autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 
 
 let NERDTreeHighlightCursorline=0
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+let NERDTreeHijackNetrw=1
+let NERDTreeShowHidden=1
+autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" | b# | endif
+
+nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 
 set tabstop=4
 set shiftwidth=4
@@ -112,11 +130,16 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 "map fuzzy search things
-nmap <C-\> :Files<CR>
 nmap <Leader>l :Lines<CR>
 
 "map toggle NerdTree
 nmap <Leader>t :NERDTreeToggle<CR>
+
+"NERDCommenter setup
+let g:NERDSpaceDelims = 1
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+
 
 let g:asyncomplete_smart_completion = 1
 let g:asyncomplete_auto_popup = 1
@@ -135,16 +158,7 @@ vnoremap <C-y> "+y
 nnoremap <C-p> "+p
 vnoremap <C-p> "+p
 
-
-
-function! Flash()
-    set cursorline cursorcolumn
-    redraw
-    sleep 100m
-    set nocursorline nocursorcolumn
-endfunction
-
-nnoremap <Leader>f :call Flash()<CR>
+nnoremap 11 :set cursorline!<cr>
 
 noremap <C-l> <C-W>l
 noremap <C-h> <C-W>h 
