@@ -1,3 +1,4 @@
+set nocompatible
 set rtp+=~/.vim/bundle/Vundle.vim/
 set rtp+=~/.fzf
 
@@ -7,6 +8,7 @@ set clipboard=unnamedplus
 set guioptions+=a
 set wrap
 set linebreak
+syntax enable
 
 "Buffer options
 set hidden
@@ -19,7 +21,6 @@ nnoremap qq :bp<bar>sp<bar>bn<bar>bd<CR>
 set ignorecase
 
 "Cursorline
-autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" | 11 | endif
 set cursorline
 
 "Setting default vim directories so the swap files do not pollute the current
@@ -32,7 +33,7 @@ set undodir=~/.vim/undo//
 if (has("termguicolors"))
  set termguicolors
 endif
-:set bg=dark
+set bg=dark
 let ayucolor="dark"
 colorscheme gruvbox
 
@@ -42,27 +43,32 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'elzr/vim-json'
+
 Plugin 'prabirshrestha/asyncomplete.vim'
 
 Plugin 'junegunn/fzf.vim'
 
 Plugin 'scrooloose/nerdtree'
-
+Plugin 'Yggdroot/indentLine'
 
 Plugin 'tpope/vim-surround'
-"Plugin 'mattn/emmet-vim'
-Plugin 'alvan/vim-closetag'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'gorodinskiy/vim-coloresque'
 
 "Plugin 'haishanh/night-owl.vim'
 "Plugin 'ayu-theme/ayu-vim'
+Plugin 'tomasiser/vim-code-dark'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 
+"Plugin 'vim-syntastic/syntastic'
+"Plugin 'walm/jshint.vim'
+
 Plugin 'scrooloose/nerdcommenter'
+Plugin '1995eaton/vim-better-javascript-completion'
 
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
@@ -72,15 +78,16 @@ Plugin 'ap/vim-buftabline'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 
-"Plugin 'w0rp/ale'
-
 call vundle#end()
 
+let g:jsx_ext_required = 0
+let g:javascript_plugin_flow = 1
 "Gitgutter settings
 set updatetime=100
 "end of Gitgutter settings
 
 
+let g:NERDTreeLimitedSyntax = 1
 nmap <Esc> :noh <CR>
 
 "Ack settings
@@ -92,8 +99,10 @@ nnoremap <Leader>a :Ack!<Space>
 "end of Ack settings
 
 "ALE settings
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
+let g:ale_completion_enabled = 1
+let g:ale_lint_on_enter = 0
+let g:ale_sign_error = 'x'
+let g:ale_sign_warning = '-'
 highlight ALEErrorSign ctermbg=NONE ctermfg=red
 highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 "end of ALE settings
@@ -102,6 +111,7 @@ let g:airline_powerline_fonts = 1
 let g:ackhighlight = 1
 
 filetype plugin indent on
+let g:vim_json_syntax_conceal = 0
 autocmd VimEnter * NERDTree
 autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 
@@ -111,13 +121,15 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeHijackNetrw=1
 let NERDTreeShowHidden=1
-autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" | b# | endif
+"autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" | b# | endif
 
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":FZF\<cr>"
 
-set tabstop=4
+set tabstop=4 " number of visual spaces per tab
+set softtabstop=4 " number of spaces in tab when editing
 set shiftwidth=4
 set expandtab
+
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
@@ -141,12 +153,11 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 
 
-let g:asyncomplete_smart_completion = 1
-let g:asyncomplete_auto_popup = 1
 set completeopt+=menuone
 set completeopt+=noinsert
 let g:mucomplete#enable_auto_at_startup = 1
 set wildmenu
+set showmatch 
 
 "Airline fixes - shows name of the file instead of UTF8
 let g:airline_section_y = '%t'
@@ -162,3 +173,22 @@ nnoremap 11 :set cursorline!<cr>
 
 noremap <C-l> <C-W>l
 noremap <C-h> <C-W>h 
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"remapping the arrow keys- making scroll + arrow work
+nnoremap <silent> <ESC>OA <UP>
+nnoremap <silent> <ESC>OB <DOWN>
+nnoremap <silent> <ESC>OC <RIGHT>
+nnoremap <silent> <ESC>OD <LEFT>
+inoremap <silent> <ESC>OA <UP>
+inoremap <silent> <ESC>OB <DOWN>
+inoremap <silent> <ESC>OC <RIGHT>
+inoremap <silent> <ESC>OD <LEFT>
