@@ -13,6 +13,9 @@ syntax enable
 set laststatus=2 " show the satus line all the time
 set ttyfast " for faster redrawing
 set diffopt+=vertical " for faster redrawing
+set nosol " to prevent cursor from jumping to the start of the line while switching buffers
+set autoread " to reload the files i.e. when the git branch is changed
+
 
 "Buffer options
 set hidden
@@ -80,11 +83,14 @@ Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'alvan/vim-closetag'
 Plugin 'ctrlpvim/ctrlp.vim'
 
-Plugin 'prettier/vim-prettier'
+" Plugin 'prettier/vim-prettier'
 
+"THEMES
 Plugin 'haishanh/night-owl.vim'
 Plugin 'ayu-theme/ayu-vim'
 Plugin 'tomasiser/vim-code-dark'
+Plugin 'drewtempelmeyer/palenight.vim'
+Plugin 'rakr/vim-one'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'ryanoasis/vim-devicons'
@@ -96,12 +102,13 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin '1995eaton/vim-better-javascript-completion'
 
 
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 
 "Plugin 'leafgarland/typescript-vim'
 "Plugin 'pangloss/vim-javascript'
 "Plugin 'maxmellon/vim-jsx-pretty'
 "Plugin 'othree/javascript-libraries-syntax.vim'
+
 
 Plugin 'google/vim-searchindex'
 Plugin 'mileszs/ack.vim'
@@ -110,6 +117,7 @@ Plugin 'tpope/vim-fugitive'
 
 "TEST FEATURES
 Plugin 'sheerun/vim-polyglot'
+Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -168,6 +176,8 @@ let g:indent_guides_start_level = 2
 "Markdown options
 let g:vim_markdown_folding_disabled = 1
 let g:instant_markdown_autostart = 0
+let g:goyo_width = 100
+nnoremap <F8> :Goyo<CR>
 
 
 set tabstop=4 " number of visual spaces per tab
@@ -175,6 +185,7 @@ set softtabstop=4 " number of spaces in tab when editing
 set shiftwidth=4
 set smarttab
 
+"KEY MAPPINGS
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
@@ -185,6 +196,11 @@ inoremap {;<CR> {<CR>};<ESC>O
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+nnoremap Y y$
+noremap H ^
+noremap L $
+noremap K     {
+noremap J     }
 
 "map fuzzy search things
 nmap <Leader>l :Lines<CR>
@@ -219,7 +235,7 @@ nnoremap 11 :set cursorline!<cr>
 
 "Moving between windows with ctrl-l ctrl-h
 noremap <C-l> <C-W>l
-noremap <C-h> <C-W>h 
+noremap <C-h> <C-W>h
 
 
 "remapping the arrow keys- making scroll + arrow work
@@ -233,9 +249,9 @@ inoremap <silent> <ESC>OC <RIGHT>
 inoremap <silent> <ESC>OD <LEFT>
 
 "SYNTASTIC
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -246,11 +262,9 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 
 "" syntastic checkers
-" javascript 
+" javascript
 let g:syntastic_javascript_checkers = ['eslint']
 
-" VIM Prettier options
-let g:prettier#config#tab_width = 4
 
 " CTRLP
 nnoremap <silent> <expr> ff (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":CtrlP\<cr>"
@@ -267,6 +281,26 @@ set wildignore+=*.zip                                       " ctrlp - ignore .zi
 set wildignore+=*.pdf                                       " ctrlp - ignore .pdf files
 set wildignore+=*/node_modules/*                            " ctrlp - ignore node modules
 set wildignore+=*/bower_components/*                        " ctrlp - ignore bower components
-set wildignore+=*/dist/*   
+set wildignore+=*/dist/*
+set wildignore+=*/bin/*
 
 autocmd FileType javascript nmap <buffer> <C-]> :YcmCompleter GoTo<CR>
+let g:jsx_ext_required = 0
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+let g:ale_fixers = {
+\   'javascript': ['prettier', 'eslint'],
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\}
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+let g:ale_linters_explicit = 1
+let g:ale_lint_on_save = 1
+let g:ale_fix_on_save = 1
+let g:ale_javascript_prettier_options = '--no-semi --single-quote --trailing-comma none'
+let g:ale_echo_msg_format = '%linter% says %s'
