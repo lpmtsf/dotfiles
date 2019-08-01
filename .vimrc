@@ -7,14 +7,15 @@ set rtp+=~/.vim/bundle/YouCompleteMe
 set number
 set clipboard=unnamedplus
 set guioptions+=a
-set wrap
 set linebreak
+set nowrap
 syntax enable
 set laststatus=2 " show the satus line all the time
 set ttyfast " for faster redrawing
 set diffopt+=vertical " for faster redrawing
 set nosol " to prevent cursor from jumping to the start of the line while switching buffers
 set autoread " to reload the files i.e. when the git branch is changed
+set timeoutlen=1000 ttimeoutlen=0 "To avoid typing characters after pressing escape
 
 
 "Buffer options
@@ -51,16 +52,32 @@ set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
 "Color theme related things
-if (has("termguicolors"))
- set termguicolors
-endif
+"if (has("termguicolors"))
+" set termguicolors
+"endif
 set bg=dark
 let ayucolor="dark"
-colorscheme gruvbox
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 1
+colorscheme onedark
+
+set term=screen-256color
 
 
 "All the plugins come here
 call vundle#begin()
+
+"THEMES
+Plugin 'haishanh/night-owl.vim'
+Plugin 'ayu-theme/ayu-vim'
+Plugin 'tomasiser/vim-code-dark'
+Plugin 'drewtempelmeyer/palenight.vim'
+Plugin 'rakr/vim-one'
+Plugin 'tomasr/molokai'
+Plugin 'axvr/photon.vim'
+Plugin 'sainnhe/vim-color-forest-night'
+Plugin 'mhartington/oceanic-next'
+Plugin 'joshdick/onedark.vim'
 
 Plugin 'VundleVim/Vundle.vim'
 
@@ -82,15 +99,9 @@ Plugin 'tpope/vim-surround'
 Plugin 'gorodinskiy/vim-coloresque'
 Plugin 'alvan/vim-closetag'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'dominikduda/vim_current_word'
 
-" Plugin 'prettier/vim-prettier'
 
-"THEMES
-Plugin 'haishanh/night-owl.vim'
-Plugin 'ayu-theme/ayu-vim'
-Plugin 'tomasiser/vim-code-dark'
-Plugin 'drewtempelmeyer/palenight.vim'
-Plugin 'rakr/vim-one'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'ryanoasis/vim-devicons'
@@ -100,6 +111,7 @@ Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin '1995eaton/vim-better-javascript-completion'
+Plugin 'nikvdp/ejs-syntax'
 
 
 " Plugin 'scrooloose/syntastic'
@@ -172,6 +184,8 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_start_level = 2
 
+"Highlight current word's twins
+let g:vim_current_word#highlight_current_word = 0
 
 "Markdown options
 let g:vim_markdown_folding_disabled = 1
@@ -199,8 +213,9 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 nnoremap Y y$
 noremap H ^
 noremap L $
-noremap K     {
-noremap J     }
+noremap K {
+noremap J }
+noremap J }
 
 "map fuzzy search things
 nmap <Leader>l :Lines<CR>
@@ -267,8 +282,21 @@ let g:syntastic_javascript_checkers = ['eslint']
 
 
 " CTRLP
-nnoremap <silent> <expr> ff (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":CtrlP\<cr>"
-let g:ctrlp_working_path_mode = 0
+" nnoremap <silent> <expr> ff (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":CtrlP\<cr>"
+"let g:ctrlp_working_path_mode = 0
+
+" F U Z Z Y   F I N D "
+"
+"
+"
+" fuzzy find files in the working directory (where you launched Vim from)
+nnoremap <silent> ff :Files<cr>|
+" fuzzy find lines in the current file
+nmap <C-f> :BLines<cr>|
+" fuzzy find text in the working directory
+nmap <C-\> :Rg |
+
+
 
 set wildignore+=*/tmp/*                                     " ctrlp - ignore files in tmp directories
 set wildignore+=*/target/*                                  " ctrlp - ignore files in target directories
@@ -284,10 +312,14 @@ set wildignore+=*/bower_components/*                        " ctrlp - ignore bow
 set wildignore+=*/dist/*
 set wildignore+=*/bin/*
 
+"ADD EJS SUPPORT
+au BufNewFile,BufRead *.ejs set filetype=html
+
 autocmd FileType javascript nmap <buffer> <C-]> :YcmCompleter GoTo<CR>
 let g:jsx_ext_required = 0
 let g:ale_linters = {
 \   'javascript': ['eslint'],
+\   'jsx': ['eslint'],
 \}
 let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
@@ -304,3 +336,20 @@ let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
 let g:ale_javascript_prettier_options = '--no-semi --single-quote --trailing-comma none'
 let g:ale_echo_msg_format = '%linter% says %s'
+
+func! s:matchparen_cursorcolumn_setup()
+  augroup matchparen_cursorcolumn
+    autocmd!
+    autocmd CursorMoved * if get(w:, "paren_hl_on", 0) | set cursorcolumn | else | set nocursorcolumn | endif
+    autocmd InsertEnter * set nocursorcolumn
+  augroup END
+endf
+if !&cursorcolumn
+  augroup matchparen_cursorcolumn_setup
+    autocmd!
+    " - Add the event _only_ if matchparen is enabled.
+    " - Event must be added _after_ matchparen loaded (so we can react to w:paren_hl_on).
+    autocmd CursorMoved * if exists("#matchparen#CursorMoved") | call <sid>matchparen_cursorcolumn_setup() | endif
+          \ | autocmd! matchparen_cursorcolumn_setup
+  augroup END
+endif
