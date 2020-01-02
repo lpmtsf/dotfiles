@@ -1,5 +1,4 @@
 set nocompatible
-set rtp+=~/.vim/bundle/Vundle.vim/
 set rtp+=~/.fzf
 set rtp+=~/.vim/bundle/YouCompleteMe
 
@@ -60,58 +59,49 @@ let ayucolor="dark"
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
 colorscheme onedark
+hi Normal guibg=NONE ctermbg=NONE
 
 set term=screen-256color
 
 
 "All the plugins come here
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
 "THEMES
-Plugin 'haishanh/night-owl.vim'
-Plugin 'ayu-theme/ayu-vim'
-Plugin 'tomasiser/vim-code-dark'
-Plugin 'drewtempelmeyer/palenight.vim'
-Plugin 'rakr/vim-one'
-Plugin 'tomasr/molokai'
-Plugin 'axvr/photon.vim'
-Plugin 'sainnhe/vim-color-forest-night'
-Plugin 'mhartington/oceanic-next'
-Plugin 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim'
 
-Plugin 'VundleVim/Vundle.vim'
+Plug 'VundleVim/Vundle.vim'
 
-Plugin 'elzr/vim-json'
+Plug 'elzr/vim-json'
 
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'
 
-Plugin 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 
-"For writing in markdown
-Plugin 'plasticboy/vim-markdown'
-Plugin 'junegunn/goyo.vim'
-Plugin 'suan/vim-instant-markdown'
+"Forriting in markdown
+Plug 'plasticboy/vim-markdown'
+Plug 'junegunn/goyo.vim'
+Plug 'suan/vim-instant-markdown'
 
 
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 
-Plugin 'tpope/vim-surround'
-Plugin 'gorodinskiy/vim-coloresque'
-Plugin 'alvan/vim-closetag'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'dominikduda/vim_current_word'
+Plug 'tpope/vim-surround'
+Plug 'gorodinskiy/vim-coloresque'
+Plug 'alvan/vim-closetag'
+Plug 'ctrlpvim/ctrlp.vim'
 
 
 
-Plugin 'vim-airline/vim-airline'
-Plugin 'ryanoasis/vim-devicons'
-Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'vim-airline/vim-airline'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-Plugin 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 
-Plugin 'scrooloose/nerdcommenter'
-Plugin '1995eaton/vim-better-javascript-completion'
-Plugin 'nikvdp/ejs-syntax'
+Plug 'scrooloose/nerdcommenter'
+Plug '1995eaton/vim-better-javascript-completion'
+Plug 'nikvdp/ejs-syntax'
 
 
 " Plugin 'scrooloose/syntastic'
@@ -122,16 +112,16 @@ Plugin 'nikvdp/ejs-syntax'
 "Plugin 'othree/javascript-libraries-syntax.vim'
 
 
-Plugin 'google/vim-searchindex'
-Plugin 'mileszs/ack.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
+Plug 'google/vim-searchindex'
+Plug 'mileszs/ack.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 "TEST FEATURES
-Plugin 'sheerun/vim-polyglot'
-Plugin 'w0rp/ale'
+Plug 'sheerun/vim-polyglot'
+Plug 'w0rp/ale'
 
-call vundle#end()
+call plug#end()
 
 
 "Support for JSX / REACT
@@ -144,17 +134,18 @@ set updatetime=50
 
 "NERDTree settings
 ""autocmd VimEnter * NERDTree
-let g:NERDTreeWinPos = "right"
+let g:NERDTreeWinPos = "left"
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeDirArrowExpandable = '⬏'
+let g:NERDTreeDirArrowCollapsible = '⬎'
+let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
 let g:NERDTreeLimitedSyntax = 1
 let NERDTreeHighlightCursorline=0
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let NERDTreeHijackNetrw=1
-let NERDTreeShowHidden=1
-let g:NERDTreeDirArrowExpandable="+"
-let g:NERDTreeDirArrowCollapsible="~"
 "map toggle NerdTree
-nmap <F9> :NERDTreeToggle<CR>
+nmap <C-n> :NERDTreeToggle<CR>
 
 "Unhighlight with escape
 nmap <Esc> :noh <CR>
@@ -290,7 +281,8 @@ let g:syntastic_javascript_checkers = ['eslint']
 "
 "
 " fuzzy find files in the working directory (where you launched Vim from)
-nnoremap <silent> ff :Files<cr>|
+nnoremap <silent> ff :GFiles<cr>|
+nnoremap <silent> fg :Files<cr>|
 " fuzzy find lines in the current file
 nmap <C-f> :BLines<cr>|
 " fuzzy find text in the working directory
