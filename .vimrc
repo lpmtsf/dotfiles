@@ -1,4 +1,5 @@
 set nocompatible
+set rtp+=~/.vim/bundle/Vundle.vim/
 set rtp+=~/.fzf
 set rtp+=~/.vim/bundle/YouCompleteMe
 
@@ -95,7 +96,6 @@ Plug 'ctrlpvim/ctrlp.vim'
 
 Plug 'vim-airline/vim-airline'
 Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 Plug 'Valloric/YouCompleteMe'
 
@@ -140,10 +140,11 @@ let g:NERDTreeDirArrowExpandable = '⬏'
 let g:NERDTreeDirArrowCollapsible = '⬎'
 let g:NERDTreeIgnore = ['^\.DS_Store$', '^tags$', '\.git$[[dir]]', '\.idea$[[dir]]', '\.sass-cache$']
 let g:NERDTreeLimitedSyntax = 1
-let NERDTreeHighlightCursorline=0
+"let NERDTreeHighlightCursorline=0
 let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-let NERDTreeHijackNetrw=1
+let g:NERDTreeStatusline = ''
+hi! NERDTreeCWD guifg=#99c794
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 "map toggle NerdTree
 nmap <C-n> :NERDTreeToggle<CR>
 
