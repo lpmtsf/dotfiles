@@ -16,10 +16,14 @@ set diffopt+=vertical " for faster redrawing
 set nosol " to prevent cursor from jumping to the start of the line while switching buffers
 set autoread " to reload the files i.e. when the git branch is changed
 set timeoutlen=1000 ttimeoutlen=0 "To avoid typing characters after pressing escape
+set showtabline=2 "always show tabline
 
 
 "Buffer options
 set hidden
+set nobackup
+set nowritebackup
+set cmdheight=2
 nnoremap <Space> :bn<CR>
 nnoremap <C-@> :bp<CR>
 nnoremap qq :bp<bar>sp<bar>bn<bar>bd<CR>
@@ -38,10 +42,10 @@ set hlsearch
 set scrolloff=30
 
 "Spellcheck highlight settings
-augroup my_colours
-  autocmd!
-  autocmd ColorScheme gruvbox hi SpellBad ctermfg=009 ctermbg=011 guifg=#ff0000 guibg=#ffff00
-augroup END
+"augroup my_colours
+"  autocmd!
+"  autocmd ColorScheme gruvbox hi SpellBad ctermfg=009 ctermbg=011 guifg=#ff0000 guibg=#ffff00
+"augroup END
 autocmd BufRead,BufNewFile *.md setlocal spell
 
 
@@ -70,6 +74,10 @@ call plug#begin('~/.vim/plugged')
 
 "THEMES
 Plug 'joshdick/onedark.vim'
+Plug 'tomasr/molokai'
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'morhetz/gruvbox'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 Plug 'VundleVim/Vundle.vim'
 
@@ -92,25 +100,25 @@ Plug 'gorodinskiy/vim-coloresque'
 Plug 'alvan/vim-closetag'
 Plug 'ctrlpvim/ctrlp.vim'
 
-
-
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
 Plug 'ryanoasis/vim-devicons'
+Plug 'itchyny/lightline.vim'
+Plug 'taohexxx/lightline-buffer'
 
 Plug 'Valloric/YouCompleteMe'
 
 Plug 'scrooloose/nerdcommenter'
 Plug '1995eaton/vim-better-javascript-completion'
 Plug 'nikvdp/ejs-syntax'
+Plug 'leafgarland/typescript-vim'
 
 
 " Plugin 'scrooloose/syntastic'
 
 "Plugin 'leafgarland/typescript-vim'
-"Plugin 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript'
 "Plugin 'maxmellon/vim-jsx-pretty'
 "Plugin 'othree/javascript-libraries-syntax.vim'
-
 
 Plug 'google/vim-searchindex'
 Plug 'mileszs/ack.vim'
@@ -118,8 +126,9 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 "TEST FEATURES
-Plug 'sheerun/vim-polyglot'
+"Plug 'sheerun/vim-polyglot'
 Plug 'w0rp/ale'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
@@ -169,7 +178,7 @@ set completeopt-=preview
 
 filetype plugin indent on
 let g:vim_json_syntax_conceal = 0
-autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
+"autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
 
 "indentGuides options
 let g:indent_guides_guide_size = 1
@@ -205,9 +214,6 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 nnoremap Y y$
 noremap H ^
 noremap L $
-noremap K {
-noremap J }
-noremap J }
 
 "map fuzzy search things
 nmap <Leader>l :Lines<CR>
@@ -223,13 +229,83 @@ let g:NERDTrimTrailingWhitespace = 1
 let g:closetag_xhtml_filetypes = 'xhtml,javascript.jsx,jsx'
 let g:closetag_filenames = '*.html,*.xhtml,*.xml,*.js,*.html.erb,*.md'
 autocmd BufNewFile,BufRead *.js set filetype=javascript.jsx
+"autocmd BufNewFile,BufRead *.ts set filetype=javascript.jsx
 autocmd BufNewFile,BufRead *.jsx set filetype=javascript.jsx
 
 "Airline fixes - shows name of the file instead of UTF8
-let g:airline_section_y = '%t'
-let g:webdevicons_enable_airline_statusline_fileformat_symbols = 0
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline_section_y = '%t'
+" let g:webdevicons_enable_airline_statusline_fileformat_symbols = 0
+" let g:airline_powerline_fonts = 1
+" let g:airline_section_warning = 0
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline_detect_paste=1
+
+" use lightline-buffer in lightline
+let g:lightline = {
+	\ 'colorscheme': 'dracula',
+    \ 'tabline': {
+    \   'left': [ 
+    \             [ 'separator' ],
+    \             [ 'bufferbefore', 'buffercurrent', 'bufferafter' ], ],
+    \ },
+    \ 'component_expand': {
+    \   'buffercurrent': 'lightline#buffer#buffercurrent',
+    \   'bufferbefore': 'lightline#buffer#bufferbefore',
+    \   'bufferafter': 'lightline#buffer#bufferafter',
+    \ },
+    \ 'component_type': {
+    \   'buffercurrent': 'tabsel',
+    \   'bufferbefore': 'raw',
+    \   'bufferafter': 'raw',
+    \ },
+    \ 'component_function': {
+    \   'bufferinfo': 'lightline#buffer#bufferinfo',
+    \ },
+    \ 'component': {
+    \   'separator': '',
+    \ },
+    \ }
+
+" lightline-buffer ui settings
+" replace these symbols with ascii characters if your environment does not support unicode
+let g:lightline_buffer_logo = ' '
+let g:lightline_buffer_readonly_icon = ''
+let g:lightline_buffer_modified_icon = '✭'
+let g:lightline_buffer_git_icon = ' '
+let g:lightline_buffer_ellipsis_icon = '..'
+let g:lightline_buffer_expand_left_icon = '◀ '
+let g:lightline_buffer_expand_right_icon = ' ▶'
+let g:lightline_buffer_active_buffer_left_icon = ''
+let g:lightline_buffer_active_buffer_right_icon = ''
+let g:lightline_buffer_separator_icon = '  '
+
+" enable devicons, only support utf-8
+" require <https://github.com/ryanoasis/vim-devicons>
+let g:lightline_buffer_enable_devicons = 1
+
+" lightline-buffer function settings
+let g:lightline_buffer_show_bufnr = 1
+
+" :help filename-modifiers
+let g:lightline_buffer_fname_mod = ':t'
+
+" hide buffer list
+let g:lightline_buffer_excludes = ['vimfiler']
+
+" max file name length
+let g:lightline_buffer_maxflen = 30
+
+" max file extension length
+let g:lightline_buffer_maxfextlen = 3
+
+" min file name length
+let g:lightline_buffer_minflen = 16
+
+" min file extension length
+let g:lightline_buffer_minfextlen = 3
+
+" reserve length for other component (e.g. info, close)
+let g:lightline_buffer_reservelen = 20
 
 "Copy paste outside of vim
 nnoremap <C-y> "+y
@@ -255,27 +331,6 @@ inoremap <silent> <ESC>OB <DOWN>
 inoremap <silent> <ESC>OC <RIGHT>
 inoremap <silent> <ESC>OD <LEFT>
 
-"SYNTASTIC
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
-let g:syntastic_loc_list_height=4
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '!'
-
-"" syntastic checkers
-" javascript
-let g:syntastic_javascript_checkers = ['eslint']
-
-
-" CTRLP
-" nnoremap <silent> <expr> ff (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":CtrlP\<cr>"
-"let g:ctrlp_working_path_mode = 0
 
 " F U Z Z Y   F I N D "
 "
@@ -311,13 +366,10 @@ au BufNewFile,BufRead *.ejs set filetype=html
 autocmd FileType javascript nmap <buffer> <C-]> :YcmCompleter GoTo<CR>
 let g:jsx_ext_required = 0
 let g:ale_linters = {
-\   'javascript': ['eslint'],
+\   'javascript': ['prettier', 'eslint'],
 \   'jsx': ['eslint'],
 \}
-let g:ale_fixers = {
-\   'javascript': ['prettier', 'eslint'],
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\}
+let g:ale_fixers = { 'javascript': ['eslint', 'prettier']}
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_lint_on_enter = 0
@@ -327,7 +379,7 @@ highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 let g:ale_linters_explicit = 1
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
-let g:ale_javascript_prettier_options = '--no-semi --single-quote --trailing-comma none'
+let g:ale_set_baloons = 1
 let g:ale_echo_msg_format = '%linter% says %s'
 
 func! s:matchparen_cursorcolumn_setup()
