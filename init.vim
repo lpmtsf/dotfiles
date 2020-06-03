@@ -18,7 +18,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -35,6 +35,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 
 Plug 'tpope/vim-surround'
+Plug 'jiangmiao/auto-pairs'
 Plug 'romainl/vim-cool'
 Plug 'mattn/emmet-vim'
 call plug#end()
@@ -76,6 +77,8 @@ set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
+
 "Buffer options
 set hidden
 set nobackup
@@ -83,6 +86,7 @@ set nowritebackup
 set cmdheight=2
 set updatetime=300
 set signcolumn=yes
+highlight SignColumn guibg=#111
 nnoremap <Space> :bn<CR>
 nnoremap <C-Space> :bp<CR>
 nnoremap qq :bp<bar>sp<bar>bn<bar>bd<CR>
@@ -141,9 +145,6 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-let g:coc_status_error_sign = '✘'
-let g:coc_status_warning_sign = '⚠'
-
 " end of COC options
 
 
@@ -153,7 +154,7 @@ autocmd BufRead,BufNewFile *.md setlocal spell
 "Split options
 set splitbelow
 set splitright
-nnoremap [[ 20<c-w><
+nnoremap [[ 20<c-><
 nnoremap ]] 20<c-w>>
 nnoremap <c-[> 20<c-w>+
 nnoremap <c-{> 20<c-w>+
@@ -192,6 +193,7 @@ nnoremap <silent> fg :Files<cr>|
 nmap <C-f> :BLines<cr>|
 nmap <C-\> :Ag<cr>|
 
+
 " Closing tags in react/jsx
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_filenames = '*.html,*.xhtml,*.xml,*.js,*.html.erb,*.md'
@@ -205,12 +207,12 @@ let g:closetag_regions = {
 
 "Airline fixes - shows name of the file instead of UTF8
 let g:airline_section_y = '%t'
-let g:webdevicons_enable_airline_statusline_fileformat_symbols = 0
-let g:airline_powerline_fonts = 0
+let g:webdevicons_enable_airline_statusline_fileformat_symbols = 1
+let g:airline_powerline_fonts = 1
 let g:airline_section_warning = 0
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_detect_paste=1
-let g:airline#extensions#coc#enabled = 0
+let g:airline#extensions#coc#enabled = 1
 
 "NERDCommenter setup
 let g:NERDSpaceDelims = 1
