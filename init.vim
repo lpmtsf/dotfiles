@@ -4,6 +4,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'dikiaap/minimalist'
 Plug 'tyrannicaltoucan/vim-quantum'
+Plug 'morhetz/gruvbox'
 
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -38,6 +39,8 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'romainl/vim-cool'
 Plug 'mattn/emmet-vim'
+
+" TEST FEATURE
 call plug#end()
 
 " General settings
@@ -70,6 +73,8 @@ set ignorecase
 set hlsearch
 set scrolloff=30
 set shortmess+=c
+set wrap
+set linebreak
 
 "Setting default vim directories so the swap files do not pollute the current
 "folders
@@ -221,3 +226,4 @@ let g:NERDTrimTrailingWhitespace = 1
 nmap <C-p>   <Plug>NERDCommenterToggle <Esc>
 vmap <C-p>   <Plug>NERDCommenterToggle<CR>gv
 let g:NERDCompactSexyComs = 1
+
