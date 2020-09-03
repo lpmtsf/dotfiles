@@ -1,3 +1,8 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 call plug#begin ("~/.config/nvim/plugged")
 Plug 'dracula/vim'
 Plug 'joshdick/onedark.vim'
@@ -9,6 +14,8 @@ Plug 'morhetz/gruvbox'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdcommenter'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
@@ -23,7 +30,7 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
+let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver', 'coc-eslint', 'coc-rls']
 
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
@@ -61,6 +68,10 @@ set autoread " to reload the files i.e. when the git branch is changed
 set timeoutlen=1000 ttimeoutlen=0 "To avoid typing characters after pressing escape
 set showtabline=2 "always show tabline
 hi Normal guibg=NONE ctermbg=NONE
+hi CursorLine guibg=#333111
+hi CursorLineNR guibg=#333111
+hi Search guibg=#eeeeee
+hi CocErrorFloat guifg=#eeeeee
 map <Esc> :noh <CR>
 set tabstop=4 " number of visual spaces per tab
 set softtabstop=4 " number of spaces in tab when editing
@@ -75,6 +86,13 @@ set scrolloff=30
 set shortmess+=c
 set wrap
 set linebreak
+let g:AutoPairsShortcutToggle = ''
+let &fcs='eob: ' " remove tildas
+" Enable Italics
+let &t_ZH = "\e[3m"
+let &t_ZR = "\e[23m"
+
+
 
 "Setting default vim directories so the swap files do not pollute the current
 "folders
@@ -154,7 +172,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
 "Spellcheck highlight settings
-autocmd BufRead,BufNewFile *.md setlocal spell
+"autocmd BufRead,BufNewFie *.md setlocal spell
 
 "Split options
 set splitbelow
@@ -172,8 +190,10 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
 let g:NERDTreeStatusline = ''
-let g:NERDTreeDirArrowExpandable = '⬏'
-let g:NERDTreeDirArrowCollapsible = '⬎'
+" let g:NERDTreeDirArrowExpandable = '⬏'
+" let g:NERDTreeDirArrowCollapsible = '⬎'
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
@@ -185,7 +205,7 @@ set splitbelow
 tnoremap <Esc> <C-\><C-n>
 " start terminal in insert mode
 au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-" open terminal on ctrl+n
+" open terminal on ctrl+t
 function! OpenTerminal()
   split term://bash
   resize 10
@@ -211,13 +231,17 @@ let g:closetag_regions = {
     \ }
 
 "Airline fixes - shows name of the file instead of UTF8
-let g:airline_section_y = '%t'
+let g:airline_section_y = ''
+let g:airline_section_z = ''
 let g:webdevicons_enable_airline_statusline_fileformat_symbols = 1
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline_section_warning = 0
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = ' '
 let g:airline_detect_paste=1
 let g:airline#extensions#coc#enabled = 1
+let g:airline_theme='minimalist'
 
 "NERDCommenter setup
 let g:NERDSpaceDelims = 1
@@ -226,4 +250,3 @@ let g:NERDTrimTrailingWhitespace = 1
 nmap <C-p>   <Plug>NERDCommenterToggle <Esc>
 vmap <C-p>   <Plug>NERDCommenterToggle<CR>gv
 let g:NERDCompactSexyComs = 1
-
