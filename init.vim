@@ -10,6 +10,8 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'dikiaap/minimalist'
 Plug 'tyrannicaltoucan/vim-quantum'
 Plug 'morhetz/gruvbox'
+Plug 'sainnhe/sonokai'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
 
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -41,11 +43,13 @@ Plug 'pangloss/vim-javascript'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tveskag/nvim-blame-line'
 
 Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 Plug 'romainl/vim-cool'
 Plug 'mattn/emmet-vim'
+Plug 'machakann/vim-highlightedyank'
 
 " TEST FEATURE
 call plug#end()
@@ -91,6 +95,11 @@ let &fcs='eob: ' " remove tildas
 " Enable Italics
 let &t_ZH = "\e[3m"
 let &t_ZR = "\e[23m"
+
+
+"Blameline settings
+autocmd BufEnter * EnableBlameLine
+let g:blameLineVirtualTextPrefix = ' || '
 
 
 
