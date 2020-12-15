@@ -1,15 +1,10 @@
 {
-  "prettier.requireConfig": true,
   "eslint.enable": true,
-  "eslint.autoFixOnSave": true,
-  "coc.preferences.formatOnSaveFiletypes": [
-    "css",
-    "javascript",
-    "javascriptreact",
-	"jsx",
-    "typescript",
-    "typescriptreact",
-	"rust",
-	"json"
-  ]
+  "eslint.autoFixOnSave": false,
+  "tsserver.formatOnType": true,
+  "suggest.maxCompleteItemCount": 20,
+  "diagnostic.errorSign": "•",
+  "diagnostic.warningSign": "•",
+  "diagnostic.infoSign": "•",
+  "diagnostic.refreshOnInsertMode": true
 }
