@@ -13,7 +13,7 @@ Plug 'morhetz/gruvbox'
 Plug 'sainnhe/sonokai'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'arcticicestudio/nord-vim'
-Plug 'jdkanani/vim-material-theme'
+Plug 'hzchirs/vim-material'
 
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
@@ -21,6 +21,9 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+Plug 'godlygeek/tabular' " needed for vim-markdown
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
 Plug 'suan/vim-instant-markdown'
@@ -30,15 +33,15 @@ Plug 'vim-airline/vim-airline-themes'
 
 Plug 'ryanoasis/vim-devicons'
 
+"Plug 'cloudhead/neovim-fuzzy'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-tsserver', 'coc-eslint', 'coc-rls']
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'branch': 'release/0.x'
-  \ }
+" Plug 'prettier/vim-prettier', {
+  " \ 'do': 'yarn install',
+  " \ 'branch': 'release/0.x'
+  " \ }
 
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
@@ -65,7 +68,7 @@ call plug#end()
 set termguicolors
 let g:quantum_black=1
 let g:quantum_italics=1
-colorscheme quantum
+colorscheme nord
 set number
 set nu relativenumber
 set clipboard=unnamedplus
@@ -112,18 +115,18 @@ let g:nord_uniform_status_lines = 1
 let g:nord_bold_vertical_split_line = 1
 let g:nord_uniform_diff_background = 1
 let g:nord_italic = 1
-let g:nord_italic_comments = 1
+let g:nord_italic_comments = 0
 let g:nord_underline = 1
 
 "Blameline settings
 autocmd BufEnter * EnableBlameLine
-let g:blameLineVirtualTextPrefix = ' || '
+let g:blameLineVirtualTextFormat = '      // %s'
 
 "Prettier Settings
-let g:prettier#exec_cmd_async = 1 " Force asynchronous formatting
-let g:prettier#autoformat = 0 " Enable autoformatting
-let g:prettier#autoformat_require_pragma = 0 " Run on save even on files without @format tag
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
+" let g:prettier#exec_cmd_async = 1 " Force asynchronous formatting
+" let g:prettier#autoformat = 0 " Enable autoformatting
+" let g:prettier#autoformat_require_pragma = 0 " Run on save even on files without @format tag
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
 
 "Setting default vim directories so the swap files do not pollute the current
 "folders
@@ -131,7 +134,6 @@ set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
-autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
 
 "Buffer options
 set hidden
@@ -140,7 +142,7 @@ set nowritebackup
 set cmdheight=2
 set updatetime=500
 set signcolumn=yes
-"highlight SignColumn guibg=#111
+highlight SignColumn guibg=#111
 nnoremap <Space> :bn<CR>
 nnoremap <C-Space> :bp<CR>
 nnoremap qq :bp<bar>sp<bar>bn<bar>bd<CR>
@@ -224,10 +226,10 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
 let g:NERDTreeStatusline = ''
-" let g:NERDTreeDirArrowExpandable = '⬏'
-" let g:NERDTreeDirArrowCollapsible = '⬎'
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
+" let g:NERDTreeDirArrowExpandable = '?'
+" let g:NERDTreeDirArrowCollapsible = '?'
+let g:NERDTreeDirArrowExpandable = '‚ñ∏'
+let g:NERDTreeDirArrowCollapsible = '‚ñæ'
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
@@ -247,11 +249,11 @@ endfunction
 nnoremap <C-t> :call OpenTerminal()<CR>
 
 " fuzzy find files in the working directory (where you launched Vim from)
-nnoremap <silent> ff :GFiles<cr>|
-nnoremap <silent> fg :Files<cr>|
-nmap <C-f> :BLines<cr>|
-nmap <C-\> :Ag<cr>|
-
+let $FZF_DEFAULT_OPTS .= ' --no-height'
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
+command! -nargs=* W w
+nnoremap <silent> ff :Files<cr>|
+nnoremap <silent> fg :FuzzyGrep<cr>|
 
 " Closing tags in react/jsx
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
@@ -275,7 +277,7 @@ let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#left_alt_sep = ' '
 let g:airline_detect_paste=1
 let g:airline#extensions#coc#enabled = 1
-let g:airline_theme='quantum'
+let g:airline_theme='minimalist'
 let g:webdevicons_enable_airline_tabline = 0
 
 "NERDCommenter setup
