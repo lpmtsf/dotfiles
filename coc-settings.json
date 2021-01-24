@@ -1,10 +1,9 @@
 {
-  "eslint.enable": true,
-  "eslint.autoFixOnSave": false,
+  "eslint.autoFixOnSave": true,
   "tsserver.formatOnType": true,
   "suggest.maxCompleteItemCount": 20,
-  "diagnostic.errorSign": "•",
-  "diagnostic.warningSign": "•",
-  "diagnostic.infoSign": "•",
+  "diagnostic.errorSign": "‚Ä¢",
+  "diagnostic.warningSign": "‚Ä¢",
+  "diagnostic.infoSign": "‚Ä¢",
   "diagnostic.refreshOnInsertMode": true
 }
