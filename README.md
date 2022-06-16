@@ -8,6 +8,6 @@ Must-have apps
 - Tmux
 - zsh
 - ohmyzsh
-- Terminator + themes plugin
+- Hyper terminal
 - Ungoogled Chromium
 - Firefox
